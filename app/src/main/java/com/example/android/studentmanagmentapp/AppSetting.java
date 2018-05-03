@@ -1,5 +1,6 @@
 package com.example.android.studentmanagmentapp;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -8,14 +9,21 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AppSetting extends AppCompatActivity {
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
+
+public class AppSetting extends AppCompatActivity {
+public static String text_font;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +77,7 @@ public class AppSetting extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt("Font", font_size2);
                 editor.commit();
+                text_font = textView.getText().toString();
 
                 Toast.makeText(getApplicationContext(), "Text size changed", Toast.LENGTH_LONG).show();
             }
@@ -87,11 +96,15 @@ public class AppSetting extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.m_share:
-                Intent intent = new Intent(Intent.ACTION_SEND);
+                /*Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_TEXT, "This is my application");
                 startActivity(Intent.createChooser(intent, "Share via..."));
-                break;
+                break;*/
+
+                // Commands to set the array back
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -109,4 +122,50 @@ public class AppSetting extends AppCompatActivity {
         }
     }
 
+    //Popping out Dialog box
+    public void btnLoginClick (View view){
+        Dialog dialog = new Dialog((this));
+        dialog.setContentView(R.layout.dialog_login_layout);
+        dialog.setTitle("Login");
+        dialog.getWindow().setLayout(700,700);
+        dialog.show();
+    }
+
+    public int counter = 3;
+    public void LoginCheck (View view){
+        EditText user = findViewById(R.id.txtUsername);
+        EditText pass = findViewById(R.id.txtPassword);
+        Button button = findViewById(R.id.btnLogin);
+
+        String username = user.getText().toString();
+        String password = pass.getText().toString();
+
+        if (username=="admin" && password=="123"){
+            Toast.makeText(getApplicationContext(), "Welcome", Toast.LENGTH_LONG);
+        }
+        else {
+            counter = counter-1;
+            if (counter>=3){
+                Toast.makeText(getApplicationContext(), "Wrong login or password", Toast.LENGTH_LONG);
+            }
+            else {
+                button.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+    //Save to internal memory
+    public void saveText (View view) {
+        FileOutputStream fileOutputStream;
+
+        try {
+            fileOutputStream = openFileOutput("Fontt.txt", 0);
+            fileOutputStream.write(text_font.getBytes());
+        } catch (FileNotFoundException e) {
+            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+        }
+        catch (IOException e){
+            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+        }
+    }
 }

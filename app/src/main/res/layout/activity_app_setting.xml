@@ -50,4 +50,22 @@
             android:text="Green" />
     </RadioGroup>
 
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="139dp"
+        android:onClick="btnLoginClick"
+        android:text="Login" />
+
+    <Button
+        android:id="@+id/btnSaveTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/btnLogin"
+        android:onClick="saveText"
+        android:text="Save Text" />
+
 </RelativeLayout>
